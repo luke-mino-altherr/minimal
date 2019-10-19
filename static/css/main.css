@@ -20,25 +20,50 @@ img {
     max-width: 100%;
 }
 
+p {
+    color: #B0B0B0;
+}
+
+
+h1, h5 {
+    color: #E6e6e6;
+}
+
+h2, h4 {
+    color: var(--accent);
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: #2C2C2C !important;
+}
+
 /* Homepage */
 
 .intro {
-    transform: translateY(22vh);
+    transform: translateY(10vh) translateX(-18vh);
+    width: 500px;
+    opacity: .90;
+    text-align: right
 }
 
 .intro > h1 {
-    color: #212121;
     font-size: 12vh;
 }
 
 .intro > h2 {
-    color: #757575;
     font-size: 3vmin;
+    text-space: 15px;
+}
+
+.intro > h4 {
+    opacity: .6;
 }
 
 /* Page content */
 
 .content {
+    background-color: var(--bg-color);
+    opacity: .70;
     padding-top: 10px;
     padding-botton: 10px;
 }
@@ -46,9 +71,7 @@ img {
 /* Profile picture */
 
 .profile {
-    width: 10vh;
-    height: 10vh;
-    border-radius: 50%;
+    height: 100%;
 }
 
 /* Colored links */
@@ -88,7 +111,7 @@ a:hover {
 }
 
 .item-tag {
-    background-color: var(--accent);
+    color: var(--accent);
 }
 
 /* Navigation icons */
