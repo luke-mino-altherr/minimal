@@ -3,3 +3,29 @@
   Override this in your site to insert code just before the closing <head> tag.
   For example, to install an analytics tracking package.
 -->
+{{ $title := (.Title | title ) }}
+{{ $siteTitle := (.Site.Title) }}
+
+{{ if .IsHome }}
+<style>
+    html body {
+        background-image: url("{{ .Site.Params.indexBackgroundImage }}");
+        background-position: right bottom;
+        background-repeat: no-repeat;
+        background-size: auto 80%;
+        background-attachment: fixed;
+    }
+</style>
+{{ end }}
+
+{{ if eq "About" $title }}
+<style>
+    html body {
+        background-image: url("{{ .Site.Params.aboutBackgroundImage }}");
+        background-position: right bottom;
+        background-repeat: no-repeat;
+        background-size: auto 60%;
+        background-attachment: fixed;
+    }
+</style>
+{{ end }}
