@@ -88,6 +88,23 @@ h2, h4 {
 
 /* Page content */
 
+.post-subheader,
+.post-subheader > p
+{
+    text-align: left;
+    font-weight: bold;
+    font: var(--header-font);
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.subheader {
+    text-transform: uppercase;
+    width: 55px;
+    font-size: 8px;
+    display: inline-block;
+}
+
 .content {
     background-color: var(--bg-color);
     opacity: .70;
@@ -181,4 +198,28 @@ footer {
     border-bottom: var(--border-width) solid var(--accent);
 }
 
+.audio {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
 
+.btn-play {
+  width: 100%;
+  text-align: center;
+  color: var(--accent);
+  background-color: var(--bg-color);
+  letter-spacing: 0.05em;
+  outline: none !important;
+  border: none;
+}
+
+.btn-play:hover,
+.btn-play:active,
+.btn-play:focus,
+.btn-play.active {
+  background: var(--bg-color);
+  color: #B06416;
+  outline: 0;
+  outline: none;
+  border: none;
+}

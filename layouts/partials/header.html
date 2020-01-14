@@ -5,10 +5,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ .Site.Title }} - {{ .Title }}</title>
+
         {{ if .Site.Params.favicon }}
             <link rel="icon" href="{{ .Site.Params.favicon | absURL }}">
         {{ end }}
+
         {{ partial "css" . }} {{ partial "js" . }} {{ hugo.Generator }}
+
         {{ with .OutputFormats.Get "RSS" }}
             <link href="{{ .RelPermalink }}" rel="alternate" type="{{ .MediaType.Type }}" title="{{ $.Site.Title }}" />
             <link href="{{ .RelPermalink }}" rel="feed" type="{{ .MediaType.Type }}" title="{{ $.Site.Title }}" />
@@ -24,9 +27,11 @@
             </script>
         {{ end }}
 
-        {{ if .Site.Params.MathJax | default true }}
+        {{ if .Site.Params.MathJax | default false }}
             <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         {{ end }}
+
+        <script src="https://unpkg.com/wavesurfer.js"></script>
 
         {{ partial "head-close" . }}
     </head>
