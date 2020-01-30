@@ -1,0 +1,101 @@
+{{ partial "header" . }}
+
+<main>
+
+    <div>
+        <h2>{{ .Title }}</h2>
+    </div>
+
+    <div class="audio">
+        <div id="waveform"></div>
+        <button class="btn btn-xs btn-play" data-action="waveform-play">
+            <i class="fa fa-play"></i>
+            <i class="fa fa-pause"></i>
+        </button>
+    </div>
+
+    <script>
+        var wavesurfer = WaveSurfer.create({
+            container: document.querySelector('#waveform'),
+            barWidth: 2,
+            barHeight: 1, // the height of the wave
+            barGap: null, // the optional spacing between bars of the wave, if not provided will be calculated in legacy format
+            //waveColor: '#9AA6DA',
+            //progressColor: '#6A7ABE',
+            waveColor: '#FFBF7F',
+            progressColor: '#DB8732',
+            height: 50,
+            normalize: true
+        });
+        wavesurfer.song = "{{ .Params.audio_url }}";
+        fetch("{{ .Params.peaks_url }}")
+            .then(response => {
+                if (!response.ok) {
+                        throw new Error("HTTP error " + response.status);
+                    }
+                return response.json();
+            })
+            .then(peaks => {
+                console.log('loaded peaks. sample_rate: ' + peaks.sample_rate);
+                wavesurfer.backend.peaks = peaks.data;
+            })
+            .then(() => {
+                wavesurfer.drawBuffer();
+            })
+            .catch((e) => {
+                console.error('error', e);
+            });
+        wavesurfer.loaded = false;
+        wavesurfer.on("play", function () {
+            console.log("play event detected");
+            if (!wavesurfer.loaded) {
+                wavesurfer.load(wavesurfer.song, wavesurfer.backend.peaks)
+            }
+        });
+        wavesurfer.on("ready", function () {
+            if (!wavesurfer.loaded) {
+                wavesurfer.loaded = true;
+                wavesurfer.play();
+            }
+        });
+        console.log(wavesurfer);
+
+        document
+          .querySelector('[data-action="waveform-play"]')
+          .addEventListener('click', function () {
+              console.log(wavesurfer.loaded);
+              if (!wavesurfer.loaded) {
+                    wavesurfer.load(wavesurfer.song, wavesurfer.backend.peaks)
+                }
+              wavesurfer.playPause();
+          });
+
+    </script>
+
+    <div align="start" class="content">{{ .Content }}</div>
+
+    <!-- Related posts -->
+    {{ $related := first 3 (where (where (where .Site.Pages.ByDate.Reverse ".Type" "==" "post") ".Params.tags" "intersect" .Params.tags) "Permalink" "!=" .Permalink) }}
+    {{ if $related }}
+        <h4 class="page-header">Related</h4>
+        {{ range $related }} {{ partial "list-item" . }} {{ end }}
+    {{ end }}
+
+    <!-- Disquis comments -->
+    {{ if and .Site.DisqusShortname (not .Params.disableComments) }}
+        <h4 class="page-header">Comments</h4>
+        {{ template "_internal/disqus.html" . }}
+    {{ end }}
+
+    <div class="post-subheader">
+        <p><span class="subheader">Created: </span>{{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }}</p>
+        {{ partial "tags" . }}
+        <p><span class="subheader">Published: </span>{{ dateFormat (.Site.Params.dateFormat | default "January 2, 2006") .Params.publishDate  }}</p>
+        {{ partial "tags" . }} </h5>
+    </div>
+
+
+
+</main>
+
+{{ partial "footer" . }}
