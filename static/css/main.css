@@ -203,8 +203,14 @@ footer {
     margin-bottom: 25px;
 }
 
+.loading {
+    color: var(--accent);
+    text-align: center;
+    margin-left: 15px;
+}
+
 .btn-play {
-  width: 100%;
+  width: 15%;
   text-align: center;
   color: var(--accent);
   background-color: var(--bg-color);

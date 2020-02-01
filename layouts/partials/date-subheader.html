@@ -1,0 +1,6 @@
+    <div class="post-subheader">
+        <p><span class="subheader">Created: </span>{{ .Date.Format (.Site.Params.dateFormat | default "January 2, 2006") }}</p>
+        {{ partial "tags" . }}
+        <p><span class="subheader">Published: </span>{{ dateFormat (.Site.Params.dateFormat | default "January 2, 2006") .Params.publishDate  }}</p>
+        {{ partial "tags" . }} </h5>
+    </div>

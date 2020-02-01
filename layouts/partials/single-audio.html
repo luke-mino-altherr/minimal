@@ -1,0 +1,88 @@
+    <div id="audio-{{ .Title | lower | urlize }}" class="audio">
+        <div id="waveform-{{ .Title | lower | urlize }}"></div>
+        <div style="display: flex">
+            <div type="button" id="btn-{{ .Title | lower | urlize }}" class="btn btn-xs btn-play" data-action="waveform-{{ .Title | lower | urlize }}-play" >
+                <i class="fa fa-play"></i>
+                <i class="fa fa-pause"></i>
+            </div>
+            <div id="ld-{{ .Title | lower | urlize }}" class="ldld loading">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        waveformMap.set(
+            {{ .Title | lower | urlize }},
+                WaveSurfer.create({
+                container: document.querySelector('#waveform-{{ .Title | lower | urlize }}'),
+                barWidth: 2,
+                barHeight: 1, // the height of the wave
+                barGap: null, // the optional spacing between bars of the wave, if not provided will be calculated in legacy format
+                //waveColor: '#9AA6DA',
+                //progressColor: '#6A7ABE',
+                waveColor: '#FFBF7F',
+                progressColor: '#DB8732',
+                height: 50,
+                normalize: true
+            })
+        );
+        waveformMap.get({{ .Title | lower | urlize }}).song = "{{ .Params.audio_url }}";
+        fetch("{{ .Params.peaks_url }}")
+            .then(response => {
+                if (!response.ok) {
+                        throw new Error("HTTP error " + response.status);
+                    }
+                return response.json();
+            })
+            .then(peaks => {
+                console.log('loaded peaks. sample_rate: ' + peaks.sample_rate);
+                waveformMap.get({{ .Title | lower | urlize }}).backend.peaks = peaks.data;
+            })
+            .then(() => {
+                waveformMap.get({{ .Title | lower | urlize }}).drawBuffer();
+            })
+            .catch((e) => {
+                console.error('error', e);
+            });
+        waveformMap.get({{ .Title | lower | urlize }}).loaded = false;
+        waveformMap.get({{ .Title | lower | urlize }}).on("play", function () {
+            console.log("play event detected");
+            if (!waveformMap.get({{ .Title | lower | urlize }}).loaded) {
+                waveformMap.get({{ .Title | lower | urlize }}).load(
+                    waveformMap.get({{ .Title | lower | urlize }}).song,
+                    waveformMap.get({{ .Title | lower | urlize }}).backend.peaks
+                )
+            } else {
+                var loadingContainer = document.getElementById("ld-{{ .Title | lower | urlize }}");
+                var loader = new ldLoader({ root: loadingContainer });
+                loader.off();
+            }
+        });
+        waveformMap.get({{ .Title | lower | urlize }}).on("ready", function () {
+            if (!waveformMap.get({{ .Title | lower | urlize }}).loaded) {
+                waveformMap.get({{ .Title | lower | urlize }}).loaded = true;
+                waveformMap.get({{ .Title | lower | urlize }}).play();
+            } else {
+                var loadingContainer = document.getElementById("ld-{{ .Title | lower | urlize }}");
+                var loader = new ldLoader({ root: loadingContainer });
+                loader.off();
+            }
+        });
+        console.log(waveformMap.get({{ .Title | lower | urlize }}));
+
+        document
+          .querySelector('[data-action="waveform-{{ .Title | lower | urlize }}-play"]')
+          .addEventListener('click', function () {
+              console.log(waveformMap.get({{ .Title | lower | urlize }}).loaded);
+              if (!waveformMap.get({{ .Title | lower | urlize }}).loaded) {
+                    waveformMap.get({{ .Title | lower | urlize }}).load(
+                      waveformMap.get({{ .Title | lower | urlize }}).song,
+                      waveformMap.get({{ .Title | lower | urlize }}).backend.peaks
+                    );
+                    var loadingContainer = document.getElementById("ld-{{ .Title | lower | urlize }}");
+                    var loader = new ldLoader({ root: loadingContainer });
+                    loader.on();
+              }
+              waveformMap.get({{ .Title | lower | urlize }}).playPause();
+          });
+
+    </script>

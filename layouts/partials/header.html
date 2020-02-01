@@ -32,6 +32,19 @@
         {{ end }}
 
         <script src="https://unpkg.com/wavesurfer.js"></script>
+        <link
+          rel="stylesheet" type="text/css"
+          href="//cdn.jsdelivr.net/gh/loadingio/ldbutton@v1.0.1/dist/ldbtn.min.css"
+        />
+        <script
+          type="text/javascript"
+          src="//cdn.jsdelivr.net/gh/loadingio/ldLoader@v1.0.0/dist/ldld.min.js"
+        ></script>
+                <link
+          rel="stylesheet" type="text/css"
+          href="//cdn.jsdelivr.net/gh/loadingio/ldLoader@v1.0.0/dist/ldld.min.css"
+        />
+
 
         {{ partial "head-close" . }}
     </head>
@@ -66,3 +79,5 @@
                 </div>
             </div>
         </nav>
+
+        <script>var waveformMap = new Map();</script>
