@@ -4,6 +4,8 @@
 
     <h2>{{ .Title }}</h2>
 
+    {{ .Sections }}
+
     {{ range (.Paginator 4).Pages }} {{ partial "list-item" . }} {{ end }}
 
 </main>
